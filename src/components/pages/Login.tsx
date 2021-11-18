@@ -1,20 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { memo,VFC } from "react";
-import { Flex, Box, Button, Heading, Input, Stack, Text } from "@chakra-ui/react"
+import { Flex, Box, Button, Heading, Input, Stack } from "@chakra-ui/react"
 import { auth } from "../../firebase"
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "@firebase/auth";
+import { onAuthStateChanged } from "@firebase/auth";
+import { useNavigate } from "react-router";
+
+import { PrimaryButton } from "../atoms/button/PrimaryButton";
+import { useAuth } from "../../hooks/useAuth";
 
 
 export const Login: VFC = memo((props: any) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const onClickLogin = () => login(email, password, isLogin)
 
-  // useEffect(()=>{
-  //   auth.onAuthStateChanged((user)=>{
-  //     user && props.history.push("/");
-  //   })
-  // },[props.history])
+  useEffect(() => {
+    const unSub = onAuthStateChanged(auth, (user) => {
+      user && navigate("/login");
+    });
+    return () => unSub();
+  }, [navigate]);
 
   return (
     <Flex align="center" justify="center" height="100vh">
@@ -30,39 +38,18 @@ export const Login: VFC = memo((props: any) => {
             }} 
           />
           <Input 
-            placeholder="Password" 
+            placeholder="Password"
+            type="password"
             name="password"
             value={password}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setPassword(e.target.value);
             }} 
           />
-          <Button 
-            bg="orange.300" 
-            _hover={{ opacity: 0.8 }}
-            onClick={() =>
-              isLogin 
-              ? signInWithEmailAndPassword(auth, email, password)
-                  .then((userCredential) => {
-                    props.history.push("/")
-                  })
-                  .catch((error) => {
-                    const errorMessage = error.message;
-                    alert(errorMessage)
-                  })
-              : createUserWithEmailAndPassword(auth, email, password)
-                  .then((userCredential) => {
-                    props.history.push("/")
-                  })
-                  .catch((error) => {
-                    const errorMessage = error.message;
-                    alert(errorMessage)
-                  })
-            }
-          >{isLogin ? "ログイン" : "登録"}</Button>
-          <Text textAlign="center" fontWeight="500" onClick={() => setIsLogin(!isLogin)}>
+          <PrimaryButton onClick={onClickLogin}>{isLogin ? "ログイン" : "登録"}</PrimaryButton>
+          <Button textAlign="center" fontWeight="500" onClick={() => setIsLogin(!isLogin)}>
             {isLogin ? "Create new account ?" : "Back to login"}
-          </Text>
+          </Button>
         </Stack>
       </Box>
     </Flex>
