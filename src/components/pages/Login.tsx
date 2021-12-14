@@ -10,9 +10,9 @@ import { useAuth } from "../../hooks/useAuth";
 
 
 export const Login: VFC = memo((props: any) => {
-  const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [isLogin, setIsLogin] = useState<boolean>(true);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
   const { login } = useAuth();
   const onClickLogin = () => login(email, password, isLogin)
@@ -46,7 +46,7 @@ export const Login: VFC = memo((props: any) => {
               setPassword(e.target.value);
             }} 
           />
-          <PrimaryButton onClick={onClickLogin}>{isLogin ? "ログイン" : "登録"}</PrimaryButton>
+          <PrimaryButton onClick={onClickLogin}>{isLogin ? "Login" : "Create"}</PrimaryButton>
           <Button textAlign="center" fontWeight="500" onClick={() => setIsLogin(!isLogin)}>
             {isLogin ? "Create new account ?" : "Back to login"}
           </Button>

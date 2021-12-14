@@ -4,13 +4,20 @@ import { Button } from "@chakra-ui/button";
 type Props = {
   children: ReactNode;
   onClick: () => void;
+  // onClick: () => void;
 }
 
-export const PrimaryButton: VFC<Props> = memo((props)=>{
+export const TodoButton: VFC<Props> = memo((props)=>{
   const { children, onClick } = props;
   return (
     <Button 
-      bg="orange.300" 
+      size='lg'
+      height='60px'
+      width='300px'
+      border='2px'
+      bg='orange.100'
+      borderColor='orange.500'
+      variant='outline'
       _hover={{ opacity: 0.8 }} 
       onClick={onClick}
     >

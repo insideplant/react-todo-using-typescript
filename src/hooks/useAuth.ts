@@ -1,6 +1,8 @@
 import { auth } from "../firebase";
+import { getAuth, signOut } from "firebase/auth";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "@firebase/auth";
 import { useNavigate } from "react-router";
+
 
 export const useAuth = () => {
   const navigate = useNavigate();
@@ -23,5 +25,17 @@ export const useAuth = () => {
       alert(error.message)
     })
   }
-  return { login }
+
+  const logout = () => {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      navigate("/login");
+      // Sign-out successful.
+    }).catch((error) => {
+      alert(error.message)
+      // An error happened.
+    });
+  }
+
+  return { login, logout }
 }
