@@ -27,7 +27,7 @@ export const TodosTable = (props:Props) => {
       </Thead>
       <Tbody>
         {todos.map((todo:Todo) => {
-          <TrTable id={todo.id} detail={todo.detail} title={todo.title}/>
+          return <TrTable id={todo.id} detail={todo.detail} title={todo.title}/>
         })}
       </Tbody>
     </Table>
