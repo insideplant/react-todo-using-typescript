@@ -15,6 +15,8 @@ import { FormControl,
 
 import reducer from "../../../hooks/reducer"
 import { PrimaryButton } from "../../atoms/button/PrimaryButton";
+import { auth, db } from "../../../firebase"
+import { collection, addDoc } from "firebase/firestore";
 
 type Props = {
   isOpen: boolean;
@@ -43,15 +45,30 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
   const [title, setTitle] = useState<string>('');
   const [limitDate, setLimitDate] = useState<string>('');
   const [detail, setDetail] = useState<string>('');
+  
+    const addEvent2 = async() => {
+      await addDoc(collection(db, "Todos"), {
+        title,
+        limitDate,
+        detail
+      });
+      setLimitDate("");
+      setTitle("");
+      setDetail("");
+      onClose();
+    }
 
-  const addEvent:(e:any) => void = e => {
-    e.preventDefault()
+  const addEvent:() => void = () => {
     dispatch({
       type: 'CREATE_EVENT',
       title,
       limitDate,
       detail
     })
+    setLimitDate("")
+    setTitle("")
+    setDetail("")
+    onClose()
   }
 
   return (
@@ -81,7 +98,7 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
               <FormLabel>Detail</FormLabel>
               <Textarea value={detail}  onChange={e => setDetail(e.target.value)}/>
             </FormControl>
-            <PrimaryButton onClick={() => addEvent}>Create a Todo</PrimaryButton>
+            <PrimaryButton onClick={addEvent2}>Create a Todo</PrimaryButton>
           </Stack>
         </ModalBody>
       </ModalContent>

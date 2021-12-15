@@ -7,19 +7,18 @@ type State = {
 }
 
 type Action = {
-  type: 'CREATE_EVENT',
-  id: number,
+  type: 'CREATE_EVENT' | 'DELETE_EVENT' | 'DELETE_ALL_EVENTS',
   title: string,
   limitDate: string,
   detail: string
 }
 
-const events = (state: State[], action:any): State[] => {
+const events = (state: State[], action:Action): State[] => {
   switch(action.type) {
     case 'CREATE_EVENT':
       const event = {
         title: action.title,
-        limitDate: action.limit,
+        limitDate: action.limitDate,
         detail: action.detail
       }
       const length = state.length

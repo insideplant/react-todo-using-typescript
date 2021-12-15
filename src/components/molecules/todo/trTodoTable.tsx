@@ -8,12 +8,13 @@ type Props = {
 }
 
 export const TrTable:VFC<Props> = (props) => {
+  console.log(props)
   const {id, title, detail,} = props;
   return(
     <Tr>
-      <Td></Td>
-      <Td></Td>
-      <Td></Td>
+      <Td>{id}</Td>
+      <Td>{title}</Td>
+      <Td>{detail}</Td>
       <Td></Td>
       <Td></Td>
     </Tr>
