@@ -16,7 +16,7 @@ import { FormControl,
 import reducer from "../../../hooks/reducer"
 import { PrimaryButton } from "../../atoms/button/PrimaryButton";
 import { auth, db } from "../../../firebase"
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 
 type Props = {
   isOpen: boolean;
@@ -24,24 +24,24 @@ type Props = {
 }
 
 type State = {
-  id: number,
   title: string,
   limitDate: string,
-  detail: string
+  detail: string,
+  createdAt: Date | null //初期値を無しにしたい場合はどうすべきか
 }
 
 const initialState: State[] = [
   {
-    id: 0,
     title: "initial todo",
     limitDate: "2021/1/1",
-    detail: ""
+    detail: "",
+    createdAt: null
   }
 ];
 
 export const TodoDetailModal: VFC<Props> = memo((props) => {
   const { isOpen, onClose} = props;
-  const [state, dispatch] = useReducer(reducer, initialState);
+  // const [state, dispatch] = useReducer(reducer, initialState);
   const [title, setTitle] = useState<string>('');
   const [limitDate, setLimitDate] = useState<string>('');
   const [detail, setDetail] = useState<string>('');
@@ -50,7 +50,8 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
       await addDoc(collection(db, "Todos"), {
         title,
         limitDate,
-        detail
+        detail,
+        createdAt: serverTimestamp(),
       });
       setLimitDate("");
       setTitle("");
@@ -58,18 +59,18 @@ export const TodoDetailModal: VFC<Props> = memo((props) => {
       onClose();
     }
 
-  const addEvent:() => void = () => {
-    dispatch({
-      type: 'CREATE_EVENT',
-      title,
-      limitDate,
-      detail
-    })
-    setLimitDate("")
-    setTitle("")
-    setDetail("")
-    onClose()
-  }
+  // const addEvent:() => void = () => {
+  //   dispatch({
+  //     type: 'CREATE_EVENT',
+  //     title,
+  //     limitDate,
+  //     detail
+  //   })
+  //   setLimitDate("")
+  //   setTitle("")
+  //   setDetail("")
+  //   onClose()
+  // }
 
   return (
     <Modal 

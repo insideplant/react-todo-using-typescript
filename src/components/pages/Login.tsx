@@ -44,7 +44,7 @@ export const Login: VFC = memo((props: any) => {
             value={password}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setPassword(e.target.value);
-            }} 
+            }}
           />
           <PrimaryButton onClick={onClickLogin}>{isLogin ? "Login" : "Create"}</PrimaryButton>
           <Button textAlign="center" fontWeight="500" onClick={() => setIsLogin(!isLogin)}>

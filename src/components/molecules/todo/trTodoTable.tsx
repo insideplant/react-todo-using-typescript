@@ -2,20 +2,20 @@ import React, { VFC } from "react";
 import { Tr, Td } from "@chakra-ui/table";
 
 type Props = {
-  id: string
   detail: string
   title: string
+  limitDate: string
+  createdAt: Date | null
 }
 
 export const TrTable:VFC<Props> = (props) => {
-  console.log(props)
-  const {id, title, detail,} = props;
+  const {createdAt, limitDate, title, detail,} = props;
   return(
     <Tr>
-      <Td>{id}</Td>
+      <Td>{createdAt}</Td>
       <Td>{title}</Td>
       <Td>{detail}</Td>
-      <Td></Td>
+      <Td>{limitDate}</Td>
       <Td></Td>
     </Tr>
   )

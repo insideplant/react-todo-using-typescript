@@ -3,19 +3,20 @@ import { Table, Thead, Tbody, Tr, Th } from "@chakra-ui/table";
 import { TrTable } from "../../molecules/todo/trTodoTable";
 
 type Props = {
-  todos : Todo[]
-}
+  todos: Todo[];
+};
 
-type Todo = { 
-  id: string
-  title: string
-  detail: string
-}
+type Todo = {
+  title: string;
+  detail: string;
+  limitDate: string;
+  createdAt: Date | null;
+};
 
-export const TodosTable = (props:Props) => {
-  const {todos} = props;
+export const TodosTable = (props: Props) => {
+  const { todos } = props;
   return (
-    <Table variant='simple'>
+    <Table variant="simple">
       <Thead>
         <Tr>
           <Th>ID</Th>
@@ -26,11 +27,19 @@ export const TodosTable = (props:Props) => {
         </Tr>
       </Thead>
       <Tbody>
-        {todos.map((todo:Todo) => {
-          return <TrTable id={todo.id} detail={todo.detail} title={todo.title}/>
+        {todos.map((todo: Todo, index: number) => {
+          console.log(index);
+          return (
+            <TrTable
+              key={index}
+              limitDate={todo.limitDate}
+              detail={todo.detail}
+              title={todo.title}
+              createdAt={todo.createdAt}
+            />
+          );
         })}
       </Tbody>
     </Table>
-  )
-
-}
+  );
+};
