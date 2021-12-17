@@ -27,7 +27,7 @@ export const Home: VFC = memo(() => {
           detail: doc.data().detail,
           title: doc.data().title,
           limitDate: doc.data().limitDate,
-          createdAt: doc.data().createdAt,
+          createdAt: doc.data({ serverTimestamps: "estimate" }).createdAt.toDate(),
         })))
       );
     });

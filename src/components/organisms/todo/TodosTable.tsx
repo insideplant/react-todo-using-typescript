@@ -10,7 +10,7 @@ type Todo = {
   title: string;
   detail: string;
   limitDate: string;
-  createdAt: Date | null;
+  createdAt:  Date | null;
 };
 
 export const TodosTable = (props: Props) => {

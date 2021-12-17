@@ -5,11 +5,13 @@ type Props = {
   detail: string
   title: string
   limitDate: string
-  createdAt: Date | null
+  createdAt:  Date | null
 }
 
 export const TrTable:VFC<Props> = (props) => {
   const {createdAt, limitDate, title, detail,} = props;
+
+
   return(
     <Tr>
       <Td>{createdAt}</Td>
