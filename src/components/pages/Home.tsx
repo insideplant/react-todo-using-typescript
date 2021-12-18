@@ -12,24 +12,22 @@ type Todos = {
   detail: string;
   title: string;
   limitDate: string;
-  createdAt: Date | null;
+  createdAt: any;
 };
 
 export const Home: VFC = memo(() => {
-  const [todos, setTodos] = useState<Todos[]>([
-    { detail: "", title: "", limitDate: "", createdAt: null },
-  ]);
+  const [todos, setTodos] = useState<Todos[]>([]);
   useEffect(() => {
     const unSub = onSnapshot(collection(db, "Todos"), (snapshot) => {
-      console.log(snapshot.docs.map((doc) => doc.id));
-      setTodos(()=>(
-        snapshot.docs.map((doc) => ({
-          detail: doc.data().detail,
-          title: doc.data().title,
-          limitDate: doc.data().limitDate,
-          createdAt: doc.data({ serverTimestamps: "estimate" }).createdAt.toDate(),
-        })))
-      );
+      let todos: Todos[] = snapshot.docs.map((doc) => ({
+        detail: doc.data().detail,
+        title: doc.data().title,
+        limitDate: doc.data().limitDate,
+        createdAt: doc
+          .data({ serverTimestamps: "estimate" })
+          .createdAt.toDate(),
+      }));
+      setTodos(todos);
     });
   }, []);
 

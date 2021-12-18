@@ -7,14 +7,15 @@ type Props = {
 };
 
 type Todo = {
-  title: string;
-  detail: string;
-  limitDate: string;
-  createdAt:  Date | null;
+  title: string,
+  detail: string,
+  limitDate: string,
+  createdAt:  any,
 };
 
 export const TodosTable = (props: Props) => {
   const { todos } = props;
+
   return (
     <Table variant="simple">
       <Thead>
@@ -28,10 +29,10 @@ export const TodosTable = (props: Props) => {
       </Thead>
       <Tbody>
         {todos.map((todo: Todo, index: number) => {
-          console.log(index);
           return (
             <TrTable
               key={index}
+              id={index + 1}
               limitDate={todo.limitDate}
               detail={todo.detail}
               title={todo.title}
