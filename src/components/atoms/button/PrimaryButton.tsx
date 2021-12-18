@@ -13,6 +13,7 @@ export const PrimaryButton: VFC<Props> = memo((props)=>{
       bg="orange.300" 
       _hover={{ opacity: 0.8 }} 
       onClick={onClick}
+      mr={3}
     >
       {children}
     </Button>

@@ -1,18 +1,20 @@
-import { memo, useCallback, VFC, useState, useEffect } from "react";
+import { memo, useCallback, VFC, useState, useEffect, useContext } from "react";
 import { Box, Flex, Heading } from "@chakra-ui/layout";
 import { TodoButton } from "../atoms/button/createTodoButton";
-import { Container, useDisclosure } from "@chakra-ui/react";
+import { Container, ModalContent, useDisclosure } from "@chakra-ui/react";
 import { db } from "../../firebase";
 import { collection, onSnapshot } from "@firebase/firestore";
 
 import { TodoDetailModal } from "../organisms/todo/TodoDetailModal";
 import { TodosTable } from "../organisms/todo/TodosTable";
+import { ModalContext } from "../../providers/ModalProvider";
 
 type Todos = {
-  detail: string;
-  title: string;
-  limitDate: string;
-  createdAt: any;
+  id: string,
+  detail: string,
+  title: string,
+  limitDate: string,
+  createdAt: any,
 };
 
 export const Home: VFC = memo(() => {
@@ -20,6 +22,7 @@ export const Home: VFC = memo(() => {
   useEffect(() => {
     const unSub = onSnapshot(collection(db, "Todos"), (snapshot) => {
       let todos: Todos[] = snapshot.docs.map((doc) => ({
+        id: doc.id,
         detail: doc.data().detail,
         title: doc.data().title,
         limitDate: doc.data().limitDate,
@@ -31,8 +34,17 @@ export const Home: VFC = memo(() => {
     });
   }, []);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const onClickCreate = useCallback(() => onOpen(), []);
+  const { onOpen, setDetail, setTitle, setLimitDate } = useContext<any>(ModalContext);
+
+  // const { isOpen, onOpen, onClose } = useDisclosure();
+  const onClickCreate = useCallback(
+    () => (
+      onOpen(),
+      setDetail(""),
+      setTitle(""),
+      setLimitDate("")
+    ), []
+  );
 
   return (
     <Container maxW="container.xl">
@@ -44,7 +56,7 @@ export const Home: VFC = memo(() => {
           <TodoButton onClick={onClickCreate}>Create</TodoButton>
         </Flex>
       </Box>
-      <TodoDetailModal isOpen={isOpen} onClose={onClose} />
+      <TodoDetailModal />
       <TodosTable todos={todos} />
     </Container>
   );
