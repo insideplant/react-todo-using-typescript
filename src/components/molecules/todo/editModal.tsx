@@ -29,6 +29,7 @@ export const EditModal: VFC = () => {
     setTitle,
     setLimitDate,
     setDetail,
+    setIsEditing,
     isOpen,
   } = useContext<any>(ModalContext);
 
@@ -48,6 +49,7 @@ export const EditModal: VFC = () => {
       { merge: true }
     );
     onClose();
+    setIsEditing(true);
   };
 
   return (

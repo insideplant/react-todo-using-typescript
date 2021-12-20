@@ -7,6 +7,7 @@ import { db } from "../../../firebase";
 
 type Props = {
   id: string;
+  status: Status;
   index: number;
   detail: string;
   title: string;
@@ -14,8 +15,14 @@ type Props = {
   createdAt: any;
 };
 
+enum Status {
+  TODO = 'TODO',
+  DOING = 'DOING',
+  DONE = 'DONE',
+}
+
 export const TrTable: VFC<Props> = (props) => {
-  const { id, index, createdAt, limitDate, title, detail } = props;
+  const { id, status, index, createdAt, limitDate, title, detail } = props;
   const year = createdAt.getFullYear();
   const month = ("0" + (createdAt.getMonth() + 1)).slice(-2);
   const date = ("0" + createdAt.getDate()).slice(-2);
@@ -43,7 +50,7 @@ export const TrTable: VFC<Props> = (props) => {
   return (
     <Tr>
       <Td>{index}</Td>
-      <Td>status</Td>
+      <Td>{status}</Td>
       <Td>{title}</Td>
       <Td>{limitDate}</Td>
       <Td>

@@ -1,5 +1,5 @@
 import React, { VFC } from "react";
-import { Table,Thead, Tbody, Tr, Th } from "@chakra-ui/table";
+import { Table, Thead, Tbody, Tr, Th } from "@chakra-ui/table";
 import { TrTable } from "../../molecules/todo/trTodoTable";
 
 type Props = {
@@ -7,11 +7,18 @@ type Props = {
 };
 
 type Todo = {
-  id: string,
-  title: string,
-  detail: string,
-  limitDate: string,
-  createdAt:  any,
+  id: string;
+  status: Status;
+  title: string;
+  detail: string;
+  limitDate: string;
+  createdAt: any;
+};
+
+enum Status {
+  TODO = 'TODO',
+  DOING = 'DOING',
+  DONE = 'DONE',
 };
 
 export const TodosTable = (props: Props) => {
@@ -35,6 +42,7 @@ export const TodosTable = (props: Props) => {
             <TrTable
               key={index}
               index={index + 1}
+              status={todo.status}
               id={todo.id}
               limitDate={todo.limitDate}
               detail={todo.detail}

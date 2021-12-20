@@ -12,6 +12,7 @@ export const ModalProvider = (props: any) => {
   const [detail, setDetail] = useState<string>("detail");
   const { children } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <ModalContext.Provider value={{ 
       isOpen, 

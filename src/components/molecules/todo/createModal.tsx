@@ -31,9 +31,16 @@ export const CreateModal: VFC = () => {
     isOpen
   } = useContext<any>(ModalContext);
 
+  enum Status {
+    TODO = 'TODO',
+    DOING = 'DOING',
+    DONE = 'DONE',
+  }
+
   const addEvent = async () => {
     await addDoc(collection(db, "Todos"), {
       title,
+      status: Status.TODO,
       limitDate,
       detail,
       createdAt: serverTimestamp(),
