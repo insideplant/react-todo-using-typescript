@@ -26,7 +26,7 @@ export const TrTable: VFC<Props> = (props) => {
     useContext<any>(ModalContext);
 
   const handleEditClick = () => {
-    setIsEditing(true);
+    setIsEditing(false);
     onOpen();
     setDetail(detail);
     setLimitDate(limitDate);
@@ -43,8 +43,8 @@ export const TrTable: VFC<Props> = (props) => {
   return (
     <Tr>
       <Td>{index}</Td>
+      <Td>status</Td>
       <Td>{title}</Td>
-      <Td>{detail}</Td>
       <Td>{limitDate}</Td>
       <Td>
         {year}/{month}/{date} {hour}:{min}
