@@ -68,6 +68,7 @@ export const CreateModal: VFC = () => {
               <FormControl>
                 <FormLabel>Limit Date</FormLabel>
                 <Input
+                  type="date" 
                   value={limitDate}
                   onChange={(e) => setLimitDate(e.target.value)}
                 />
