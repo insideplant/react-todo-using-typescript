@@ -33,10 +33,6 @@ export const EditModal: VFC = () => {
     isOpen,
   } = useContext<any>(ModalContext);
 
-  {
-    console.log("title");
-  }
-
   const tasksRef = collection(db, "Todos");
   const editEvent = async () => {
     await setDoc(

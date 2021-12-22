@@ -33,7 +33,7 @@ export const TodosTable = (props: Props) => {
           <Th>Todo</Th>
           <Th>Limit</Th>
           <Th>created day</Th>
-          <Th>Edit</Th>
+          <Th>action</Th>
         </Tr>
       </Thead>
       <Tbody>

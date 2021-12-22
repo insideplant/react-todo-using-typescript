@@ -2,8 +2,9 @@ import React, { VFC, useContext } from "react";
 import { Tr, Td } from "@chakra-ui/table";
 import { ModalContext } from "../../../providers/ModalProvider";
 import { PrimaryButton } from "../../atoms/button/PrimaryButton";
-import { collection, deleteDoc, doc } from "firebase/firestore";
+import { collection, deleteDoc, doc, setDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
+import { StatusButton } from "../../atoms/button/statusButton";
 
 type Props = {
   id: string;
@@ -16,9 +17,9 @@ type Props = {
 };
 
 enum Status {
-  TODO = 'TODO',
-  DOING = 'DOING',
-  DONE = 'DONE',
+  TODO = "TODO",
+  DOING = "DOING",
+  DONE = "DONE",
 }
 
 export const TrTable: VFC<Props> = (props) => {
@@ -26,8 +27,6 @@ export const TrTable: VFC<Props> = (props) => {
   const year = createdAt.getFullYear();
   const month = ("0" + (createdAt.getMonth() + 1)).slice(-2);
   const date = ("0" + createdAt.getDate()).slice(-2);
-  const hour = ("0" + createdAt.getHours()).slice(-2);
-  const min = ("0" + createdAt.getMinutes()).slice(-2);
 
   const { onOpen, setIsEditing, setDetail, setTitle, setLimitDate, setId } =
     useContext<any>(ModalContext);
@@ -47,14 +46,36 @@ export const TrTable: VFC<Props> = (props) => {
     await deleteDoc(doc(tasksRef, id));
   };
 
+  const editEvent2 = async (status: Status) => {
+    const status2 = () => {
+      if (status === Status.TODO) {
+        return Status.DOING;
+      } else if (status === Status.DOING) {
+        return Status.DONE;
+      } else {
+        return Status.TODO;
+      }
+    };
+
+    await setDoc(
+      doc(tasksRef, id),
+      {
+        status: status2(),
+      },
+      { merge: true }
+    );
+  };
+
   return (
     <Tr>
       <Td>{index}</Td>
-      <Td>{status}</Td>
+      <Td>
+        <StatusButton onClick={() => editEvent2(status)} status={status} >{status}</StatusButton>
+      </Td>
       <Td>{title}</Td>
       <Td>{limitDate}</Td>
       <Td>
-        {year}/{month}/{date} {hour}:{min}
+        {year}-{month}-{date}
       </Td>
       <Td>
         <PrimaryButton onClick={handleEditClick}>edit</PrimaryButton>
