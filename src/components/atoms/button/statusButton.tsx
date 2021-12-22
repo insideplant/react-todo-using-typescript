@@ -15,16 +15,16 @@ type Props = {
 
 export const StatusButton: VFC<Props> = memo((props) => {
   const { children, onClick, status } = props;
-  // const color = (e:Status) =>{
-  //   switch (e) {
-  //     case "TODO": 
-  //       return "green.100";
-  //     case "DOING": 
-  //       return "orange.300";
-  //     case "DONE": 
-  //       return "gray.300";
-  //   }
-  // };
+  const color = (e:Status) =>{
+    switch (e) {
+      case "TODO": 
+        return "green.100";
+      case "DOING": 
+        return "orange.300";
+      case "DONE": 
+        return "gray.300";
+    }
+  };
 
   return (
     <Button
