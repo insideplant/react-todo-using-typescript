@@ -34,7 +34,6 @@ export const StatusButton: VFC<Props> = memo((props) => {
       mr={3}
     >
       {children}
-      {/* {console.log(color(status))} */}
     </Button>
   );
 });

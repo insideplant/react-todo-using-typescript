@@ -29,6 +29,7 @@ export const Login: VFC = memo((props: any) => {
       <Box bg="white" py={5} w="sm" borderRadius="md" shadow="md">
         <Heading as="h1" px={10}>{ isLogin? "Login" : "Register" }</Heading>
         <Stack spacing={4} py={4} px={10}>
+          
           <Input 
             placeholder="User ID"
             name="email"
