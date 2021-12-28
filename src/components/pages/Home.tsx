@@ -15,7 +15,7 @@ type Todos = {
   detail: string;
   title: string;
   limitDate: string;
-  createdAt: any;
+  createdAt: Date;
 };
 
 enum Status {

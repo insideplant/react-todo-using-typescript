@@ -1,4 +1,4 @@
-import React, { VFC } from "react";
+import React, { VFC, useMemo, useState} from "react";
 import { Table, Thead, Tbody, Tr, Th } from "@chakra-ui/table";
 import { TrTable } from "../../molecules/todo/trTodoTable";
 
@@ -12,7 +12,7 @@ type Todo = {
   title: string;
   detail: string;
   limitDate: string;
-  createdAt: any;
+  createdAt: Date;
 };
 
 enum Status {
@@ -21,18 +21,60 @@ enum Status {
   DONE = 'DONE',
 };
 
+type Sort = {
+  key: string;
+  order: number;
+}
+
 export const TodosTable = (props: Props) => {
   const { todos } = props;
+  const [sort, setSort] = useState<Sort>({});
+
+  const SORTNAMES = ["id","status","limitDate","createdAt"];
+
+  let sortedStates = useMemo(() => {
+    let _sortedStates = todos;
+    if (sort.key) {
+      _sortedStates = _sortedStates.sort((a,b) => {
+        a = a[sort.key];
+        b = b[sort.key];
+
+        if(a === b) {
+          return 0;
+        }
+        if(a > b) {
+          return 1 * sort.order;
+        }
+        if(a < b) {
+          return -1 * sort.order;
+        } 
+      });
+    }
+    return _sortedStates;
+  }, [sort, todos]);
+
+  const handleSort = (sortName: string) => {
+    
+    if (sort.key === sortName) {
+      setSort({ ...sort, order: -sort.order });
+    } else {
+      setSort({
+        key: sortName,
+        order: 1
+      })
+    }
+  };
+
 
   return (
     <Table variant="simple">
       <Thead>
         <Tr>
-          <Th>ID</Th>
-          <Th>STATUS</Th>
-          <Th>Todo</Th>
-          <Th>Limit</Th>
-          <Th>created day</Th>
+          <Th onClick={() => handleSort("id")}>ID</Th>
+          <Th onClick={() => handleSort("status")}>STATUS</Th>
+          <Th onClick={() => handleSort("todo")}>Todo</Th>
+          <Th onClick={() => handleSort("limitDate")}>Limit</Th>
+          <Th onClick={() => handleSort("createdAt")}>created day</Th>
           <Th>action</Th>
         </Tr>
       </Thead>
