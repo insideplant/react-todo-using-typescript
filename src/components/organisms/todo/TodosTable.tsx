@@ -22,22 +22,20 @@ enum Status {
 };
 
 type Sort = {
-  key: string;
+  key: "id"|"status"|"title"|"detail"|"limitDate"| "createdAt";
   order: number;
 }
 
 export const TodosTable = (props: Props) => {
   const { todos } = props;
-  const [sort, setSort] = useState<Sort>({});
-
-  const SORTNAMES = ["id","status","limitDate","createdAt"];
+  const [sort, setSort] = useState<Sort>({key: "id", order: 1});
 
   let sortedStates = useMemo(() => {
     let _sortedStates = todos;
     if (sort.key) {
-      _sortedStates = _sortedStates.sort((a,b) => {
-        a = a[sort.key];
-        b = b[sort.key];
+      _sortedStates = _sortedStates.sort((a,b): any  => {
+        a = a[sort.key] as any ;
+        b = b[sort.key] as any ;
 
         if(a === b) {
           return 0;
@@ -53,7 +51,7 @@ export const TodosTable = (props: Props) => {
     return _sortedStates;
   }, [sort, todos]);
 
-  const handleSort = (sortName: string) => {
+  const handleSort = (sortName: "id"|"status"|"title"|"limitDate"| "createdAt") => {
     
     if (sort.key === sortName) {
       setSort({ ...sort, order: -sort.order });
@@ -72,7 +70,7 @@ export const TodosTable = (props: Props) => {
         <Tr>
           <Th onClick={() => handleSort("id")}>ID</Th>
           <Th onClick={() => handleSort("status")}>STATUS</Th>
-          <Th onClick={() => handleSort("todo")}>Todo</Th>
+          <Th onClick={() => handleSort("title")}>Todo</Th>
           <Th onClick={() => handleSort("limitDate")}>Limit</Th>
           <Th onClick={() => handleSort("createdAt")}>created day</Th>
           <Th>action</Th>

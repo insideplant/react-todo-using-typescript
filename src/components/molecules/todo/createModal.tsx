@@ -16,8 +16,9 @@ import { Stack } from "@chakra-ui/layout";
 import { PrimaryButton } from "../../atoms/button/PrimaryButton";
 
 import { db } from "../../../firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc,setDoc,doc, serverTimestamp } from "firebase/firestore";
 import { ModalContext } from "../../../providers/ModalProvider";
+import { auth } from "../../../firebase";
 
 export const CreateModal: VFC = () => {
   const {
@@ -39,6 +40,8 @@ export const CreateModal: VFC = () => {
 
   const addEvent = async () => {
     await addDoc(collection(db, "Todos"), {
+    // await setDoc(doc(db, "Todos", "new-todo"), {
+      userId: auth.currentUser?.uid,
       title,
       status: Status.TODO,
       limitDate,

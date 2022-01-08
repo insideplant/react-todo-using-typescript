@@ -27,6 +27,7 @@ export const TrTable: VFC<Props> = (props) => {
   const year = createdAt.getFullYear();
   const month = ("0" + (createdAt.getMonth() + 1)).slice(-2);
   const date = ("0" + createdAt.getDate()).slice(-2);
+  console.log(id);
 
   const { onOpen, setIsEditing, setDetail, setTitle, setLimitDate, setId } =
     useContext<any>(ModalContext);

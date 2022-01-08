@@ -1,9 +1,9 @@
 import { memo, useCallback, VFC, useState, useEffect, useContext } from "react";
 import { Box, Flex, Heading } from "@chakra-ui/layout";
 import { TodoButton } from "../atoms/button/createTodoButton";
-import { Container, ModalContent, useDisclosure } from "@chakra-ui/react";
-import { db } from "../../firebase";
-import { collection, onSnapshot } from "@firebase/firestore";
+import { Container } from "@chakra-ui/react";
+import { db, auth } from "../../firebase";
+import { collection, onSnapshot, query, where } from "@firebase/firestore";
 
 import { TodoDetailModal } from "../organisms/todo/TodoDetailModal";
 import { TodosTable } from "../organisms/todo/TodosTable";
@@ -27,9 +27,11 @@ enum Status {
 export const Home: VFC = memo(() => {
   const [todos, setTodos] = useState<Todos[]>([]);
   useEffect(() => {
-    const unSub = onSnapshot(collection(db, "Todos"), (snapshot) => {
-      let todos: Todos[] = snapshot.docs.map((doc) => ({
+    const q = query(collection(db, "Todos"), where("userId", "==", auth.currentUser?.uid));
+    const unSub = onSnapshot(q, (querySnapshot)  => {
+      let todos: Todos[] = querySnapshot.docs.map((doc) => ({
         id: doc.id,
+        userId: doc.data().userId,
         status: doc.data().status,
         detail: doc.data().detail,
         title: doc.data().title,
@@ -54,7 +56,7 @@ export const Home: VFC = memo(() => {
   return (
     <Container maxW="container.xl">
       <Box p={3}>
-        <Heading as="h3" size="lg">
+        <Heading as="h3" size="lg" p={4}>
           Todo List
         </Heading>
         <Flex align="center" justify="center" height="30vh">
