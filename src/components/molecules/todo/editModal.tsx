@@ -10,9 +10,9 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
+  Stack
 } from "@chakra-ui/react";
 
-import { Stack } from "@chakra-ui/layout";
 import { PrimaryButton } from "../../atoms/button/PrimaryButton";
 
 import { db } from "../../../firebase";
