@@ -44,6 +44,7 @@ export const Home: VFC = memo(() => {
     return () => unSub();
   });
 
+  console.log(state);
 
   useEffect(() => {
     const q = query(collection(db, "Todos"), where("userId", "==", state ));
