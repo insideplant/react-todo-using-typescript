@@ -21,47 +21,39 @@ type Todos = {
 };
 
 enum Status {
-  TODO = 'TODO',
-  DOING = 'DOING',
-  DONE = 'DONE',
+  TODO = "TODO",
+  DOING = "DOING",
+  DONE = "DONE",
 }
 
 export const Home: VFC = memo(() => {
   const [todos, setTodos] = useState<Todos[]>([]);
   const navigate = useNavigate();
-  const [state, setState] = useState()
+  const [state, setState] = useState();
 
   useEffect(() => {
-    //Firebase ver9 compliant (modular)
     const unSub = onAuthStateChanged(auth, (user) => {
-      if (user){
+      if (user) {
         setState(user.uid as any);
-        console.log(user.uid);
+        const q = query(collection(db, "Todos"), where("userId", "==", state ));
+        console.log(q);
+        onSnapshot(q, (querySnapshot) => {
+          let todos: Todos[] = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            userId: doc.data().userId,
+            status: doc.data().status,
+            detail: doc.data().detail,
+            title: doc.data().title,
+            limitDate: doc.data().limitDate,
+            createdAt: doc
+              .data({ serverTimestamps: "estimate" })
+              .createdAt.toDate(),
+          }));
+          setTodos(todos);
+        });
       } else {
         !user && navigate("login");
       }
-    });
-    return () => unSub();
-  });
-
-  console.log(state);
-
-  useEffect(() => {
-    const q = query(collection(db, "Todos"), where("userId", "==", state ));
-    const unSub = onSnapshot(q, (querySnapshot)  => {
-      let todos: Todos[] = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        userId: doc.data().userId,
-        status: doc.data().status,
-        detail: doc.data().detail,
-        title: doc.data().title,
-        limitDate: doc.data().limitDate,
-        createdAt: doc
-          .data({ serverTimestamps: "estimate" })
-          .createdAt.toDate(),
-      }));
-      console.log(todos);
-      setTodos(todos);
     });
   }, []);
 
@@ -70,7 +62,13 @@ export const Home: VFC = memo(() => {
 
   // const { isOpen, onOpen, onClose } = useDisclosure();
   const onClickCreate = useCallback(
-    () => (onOpen(), setDetail(""), setTitle(""), setLimitDate(""), setIsEditing(true)),
+    () => (
+      onOpen(),
+      setDetail(""),
+      setTitle(""),
+      setLimitDate(""),
+      setIsEditing(true)
+    ),
     []
   );
 
