@@ -4,12 +4,13 @@ import { TodoButton } from "../atoms/button/createTodoButton";
 import { Container } from "@chakra-ui/react";
 import { db, auth } from "../../firebase";
 import { collection, onSnapshot, query, where } from "@firebase/firestore";
-import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router";
 
 import { TodoDetailModal } from "../organisms/todo/TodoDetailModal";
 import { TodosTable } from "../organisms/todo/TodosTable";
 import { ModalContext } from "../../providers/ModalProvider";
+import { UserContext } from "../../providers/UserProvider";
+
 
 type Todos = {
   id: string;
@@ -29,32 +30,28 @@ enum Status {
 export const Home: VFC = memo(() => {
   const [todos, setTodos] = useState<Todos[]>([]);
   const navigate = useNavigate();
-  const [state, setState] = useState();
+  const {user} = useContext<any>(UserContext);
 
   useEffect(() => {
-    const unSub = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setState(user.uid as any);
-        const q = query(collection(db, "Todos"), where("userId", "==", state ));
-        console.log(q);
-        onSnapshot(q, (querySnapshot) => {
-          let todos: Todos[] = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            userId: doc.data().userId,
-            status: doc.data().status,
-            detail: doc.data().detail,
-            title: doc.data().title,
-            limitDate: doc.data().limitDate,
-            createdAt: doc
-              .data({ serverTimestamps: "estimate" })
-              .createdAt.toDate(),
-          }));
-          setTodos(todos);
-        });
-      } else {
-        !user && navigate("login");
-      }
-    });
+    if (user) {
+      const q = query(collection(db, "Todos"), where("userId", "==", user));
+      onSnapshot(q, (querySnapshot) => {
+        let todos: Todos[] = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          userId: doc.data().userId,
+          status: doc.data().status,
+          detail: doc.data().detail,
+          title: doc.data().title,
+          limitDate: doc.data().limitDate,
+          createdAt: doc
+            .data({ serverTimestamps: "estimate" })
+            .createdAt.toDate(),
+        }));
+        setTodos(todos);
+      });
+    } else {
+      navigate("login");
+    }
   }, []);
 
   const { onOpen, setDetail, setTitle, setLimitDate, setIsEditing } =

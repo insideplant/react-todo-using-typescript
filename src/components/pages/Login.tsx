@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { memo, VFC } from "react";
 import { Flex, Box, Button, Heading, Input, Stack } from "@chakra-ui/react";
+import { UserContext } from "../../providers/UserProvider";
 
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 import { useAuth } from "../../hooks/useAuth";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../firebase";
+
+
+
 
 export const Login: VFC = memo((props: any) => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
@@ -11,6 +17,7 @@ export const Login: VFC = memo((props: any) => {
   const [password, setPassword] = useState<string>("");
   const { login } = useAuth();
   const onClickLogin = () => login(email, password, isLogin);
+  const {user, setUser} = useContext<any>(UserContext);
 
   // useEffect(() => {
   //   const unSub = onAuthStateChanged(auth, (user) => {
@@ -18,6 +25,16 @@ export const Login: VFC = memo((props: any) => {
   //   });
   //   return () => unSub();
   // }, [navigate]);
+
+  useEffect(() => {
+    const unSub = onAuthStateChanged(auth, (test) => {
+      if (test) {
+        setUser(test.uid as any);
+      } 
+    });
+  }, [setIsLogin]);
+
+  
 
   return (
     <Flex align="center" justify="center" height="100vh">
