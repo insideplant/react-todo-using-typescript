@@ -27,13 +27,13 @@ export const Login: VFC = memo((props: any) => {
   // }, [navigate]);
 
   useEffect(() => {
-    const unSub = onAuthStateChanged(auth, (test) => {
-      if (test) {
-        setUser(test.uid as any);
+    // userStateにログインしているuserのidを保持
+    const unSub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user.uid as any);
       } 
     });
   }, [setIsLogin]);
-
   
 
   return (

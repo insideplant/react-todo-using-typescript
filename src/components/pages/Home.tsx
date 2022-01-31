@@ -11,7 +11,6 @@ import { TodosTable } from "../organisms/todo/TodosTable";
 import { ModalContext } from "../../providers/ModalProvider";
 import { UserContext } from "../../providers/UserProvider";
 
-
 type Todos = {
   id: string;
   status: Status;
@@ -30,11 +29,20 @@ enum Status {
 export const Home: VFC = memo(() => {
   const [todos, setTodos] = useState<Todos[]>([]);
   const navigate = useNavigate();
-  const {user} = useContext<any>(UserContext);
+  const { user } = useContext<any>(UserContext);
 
+  // userにidの格納は確認済み
+  console.log(user);
+  
   useEffect(() => {
     if (user) {
-      const q = query(collection(db, "Todos"), where("userId", "==", user));
+      // Todosという名前のコレクションを取得し、
+      const q = query(collection(db, "Todos"), 
+      // Login時にuser変数に格納させたuser.uidと同じフィールドを持つドキュメントを取得。
+      where("userId", "==", user ));
+      console.log(q);
+      
+      // 上述で取得したドキュメントを
       onSnapshot(q, (querySnapshot) => {
         let todos: Todos[] = querySnapshot.docs.map((doc) => ({
           id: doc.id,
@@ -47,6 +55,8 @@ export const Home: VFC = memo(() => {
             .data({ serverTimestamps: "estimate" })
             .createdAt.toDate(),
         }));
+        // console.log(todos);
+        // 変数todosに追加値をsetTodosを用いてtodosに値を保持
         setTodos(todos);
       });
     } else {
